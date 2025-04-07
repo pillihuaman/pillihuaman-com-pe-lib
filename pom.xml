@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>pillihuaman.com.pe</groupId>
     <artifactId>pillihuaman.com.pe.lib</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.2-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <properties>
@@ -12,10 +12,11 @@
     </properties>
     <repositories>
         <repository>
-            <id>pillihuaman-com-pe-lib</id>
+            <id>pillihuamanlib-pillihuaman-com-pe-lib</id>
             <url>https://pillihuamanlib-570123367471.d.codeartifact.us-east-2.amazonaws.com/maven/pillihuaman-com-pe-lib/</url>
         </repository>
     </repositories>
+
     <dependencies>
         <!-- Jackson Dependencies for JSON Annotations -->
         <dependency>
@@ -110,14 +111,13 @@
             </plugin>
         </plugins>
     </build>
-
-    <!-- distributionManagement section added here -->
     <distributionManagement>
         <repository>
-            <id>pillihuamanlib-pillihuaman-com-pe-lib</id>
-            <name>pillihuaman CodeArtifact Repo</name>
-            <url>https://pillihuamanlib-570123367471.d.codeartifact.us-east-2.amazonaws.com/maven/pillihuaman-com-pe-lib/</url>
+            <id>pillihuamanlib-pillihuaman-com-pe-lib</id> <!-- 👈 Cambiar aquí -->
+            <name>CodeArtifact Maven repo</name>
+            <url>https://pillihuamanlib-570123367471.d.codeartifact.us-east-1.amazonaws.com/maven/pillihuaman-com-pe-lib/</url>
         </repository>
     </distributionManagement>
+
 
 </project>
