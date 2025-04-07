@@ -1,4 +1,4 @@
-name: Deploy Artifact to AWS CodeArtifact
+name: Deploy Artifact to Artifactory
 
 on:
   push:
@@ -10,27 +10,47 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # Paso 1: Checkout del repositorio
       - name: Checkout Repository
         uses: actions/checkout@v2
 
+      # Paso 2: Configurar el JDK 17
       - name: Set up JDK 17
         uses: actions/setup-java@v2
         with:
           java-version: '17'
 
+      # Paso 3: Configurar Maven
       - name: Set up Maven
         uses: actions/setup-maven@v2
         with:
           maven-version: '3.8.1'
 
-      - name: Authenticate with AWS CodeArtifact
+      # Paso 4: Configurar Artifactory y autenticar el acceso
+      - name: Authenticate with Artifactory
         run: |
-          aws codeartifact login --tool maven --repository pillihuaman-com-pe-lib --domain pillihuamanlib --domain-owner 570123367471
+          echo "$ARTIFACTORY_API_KEY" | docker login $ARTIFACTORY_URL -u $ARTIFACTORY_USER --password-stdin
 
-      - name: Build and Deploy Artifact to CodeArtifact
+      # Paso 5: Configurar el archivo `settings.xml` de Maven para Artifactory
+      - name: Configure Maven settings for Artifactory
         run: |
-          mvn clean deploy --settings ./settings.xml
+          mkdir -p ~/.m2
+          echo "<settings>
+                  <servers>
+                    <server>
+                      <id>artifactory</id>
+                      <username>${{ secrets.ARTIFACTORY_USER }}</username>
+                      <password>${{ secrets.ARTIFACTORY_API_KEY }}</password>
+                    </server>
+                  </servers>
+                </settings>" > ~/.m2/settings.xml
 
+      # Paso 6: Compilar y desplegar el artefacto en Artifactory
+      - name: Build and Deploy Artifact to Artifactory
+        run: |
+          mvn clean deploy --settings ~/.m2/settings.xml
+
+      # Paso 7: (Opcional) Invalidar la caché de CloudFront si es necesario
       - name: Invalidate CloudFront Cache (optional)
         run: |
           aws cloudfront create-invalidation --distribution-id E1ZPD1AZFOON1L --paths '/*'
