@@ -1,0 +1,25 @@
+package pillihuaman.com.pe.lib.common;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.bson.types.ObjectId;
+
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+public class ResponseUser {
+    private ObjectId id;
+    private String alias;
+    private ObjectId idSystem;
+    private String mail;
+    private String mobilPhone;
+    private String user;
+    private String username;
+    private int enabled;
+    private ObjectId idRol;
+
+}
+

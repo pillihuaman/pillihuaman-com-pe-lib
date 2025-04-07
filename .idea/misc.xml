@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ExternalStorageConfigurationManager" enabled="true" />
+  <component name="FrameworkDetectionExcludesConfiguration">
+    <type id="Spring" />
+  </component>
+  <component name="MavenProjectsManager">
+    <option name="originalFiles">
+      <list>
+        <option value="$USER_HOME$/Downloads/spring-security-3.1.1-changes-main/spring-security-3.1.1-changes-main/pom.xml" />
+        <option value="$USER_HOME$/Downloads/jcabelloc-itana-itana-demos-15f92cedf548/jcabelloc-itana-itana-demos-15f92cedf548/spring-security-jwt-demo/pom.xml" />
+        <option value="$PROJECT_DIR$/../pillihuaman.com.pe.support/pom.xml" />
+        <option value="$PROJECT_DIR$/pom.xml" />
+        <option value="$PROJECT_DIR$/../pillihuaman-com-pe-basebd/pom.xml" />
+        <option value="$PROJECT_DIR$/../pillihuaman-com-pe-security/pom.xml" />
+        <option value="$PROJECT_DIR$/../pillihuaman-com-pe-support/pom.xml" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_17" project-jdk-name="17" project-jdk-type="JavaSDK">
+    <output url="file://C:/" />
+  </component>
+</project>
