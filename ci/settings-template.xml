@@ -6,7 +6,7 @@
         <server>
             <id>pillihuamanlib-pillihuaman-com-pe-lib</id>
             <username>aws</username>
-            <password>{{AUTH_TOKEN}}</password>
+            <password>eyJ2ZXIiOjEsImlzdSI6MTc0NDA2NjA1MywiZW5jIjoiQTEyOEdDTSIsInRhZyI6IjBvNzVNb3lLWEpQZW8xZ0YwRnBWVHciLCJleHAiOjE3NDQxMDkyNTMsImFsZyI6IkExMjhHQ01LVyIsIml2IjoiU1BtOUNfYTVmVzJORlRJNSJ9.MxlJV8ijsfntT6NOO--Gbw.cDbf9yeBmzs8eyZH.UGUJisLexqLnnvCAM3hHOJH_j5kr02wWiWKqW-xB_ddrK8UMR4_UVwpFKehCqq9xOmUjbkE4IL9kucpsZ_q07tDikxomZObMIspU1Fxck0B54ureitSB7BiVgaGKLX0ysQvaq5IhNZA8QbN9uqlJyj-j5bAAVvpRQG8dbs5VSnhVJq32Xbafn6_NRkSebb7krqX9vVuyrgVzZNyN6moHl6amsuonh-5OHlle-FRp0MiW8WtJZgwx75PRU8-M5Ui9ta3u2u9PEOG2aGzp1mfY8hcN1kl4fT33QfODBxQ2uKqYwv5yWr0iZe71OaFoGj9mZtPe5Xsbs6L8mtwCpaurSGeaSuj7PluFWNo-uA6Hu1nOqT1kW8wEYzhCJl4bRS_rqni52A_-8dfPNo2EGiJSTDhKbthhPUEjlSw3uW09FXDA0Hsq9988YHIgeNkTkWqG4Iq9lb6KNk0Ss7-9dndbY2T6Yvx_SqbmnUOMdUHk62NI3Pi721HqPru8jG4z2MvBrHBJMmmhPvm0LO_lUfJqmh2_217HUyO_m1kuadJG2pZ0pXaXVZ-pxzdGsjlGNwPgSyagywJbbS-LrJI--Mj28521AmrIaRAwKyLNsu-3TuK-snKUoPXIxpbO-4mgYD9nd_OSuOn0CgIBm-qCh4LvcKCXMmtrfrmJa_cW-i6xR8Cq1EMQfkS93HMYXpUGYtxPTBAdCr4GwyIzdo5FpYMaSp-C8o0vu5xRe2GkPl3hBPus-wRsGPyJfGD4qZ7VrPUyhsrpOYya2ZuENAbsx0HQzoh14Ct1xSZQQ_NR7cbe48eOtYw6c1mLAA_8CV-84pe6hCxWCJKbnqs01-bn9cZslnpteazlEbQm-DR59gSuPuMB4eX21BBxqmjNQxlFIRUx5QESMhwFv9xavqAplYj7bHBYwqYXbXNOYNzs7h05Q_Sefk7hzDo_76_WKbM7uRqlRhYu0Fi-Y3c.V4rcL-JtDM9Dmqhbla0A6Q</password>
         </server>
     </servers>
 
