@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.bson.types.ObjectId;
 
+import java.util.List;
+
 @Data
 @Builder
 @AllArgsConstructor
@@ -19,7 +21,8 @@ public class ResponseUser {
     private String user;
     private String username;
     private int enabled;
-    private ObjectId idRol;
+    private List<String> roles;
+
 
 }
 

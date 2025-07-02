@@ -21,7 +21,7 @@ public class AuditEntity implements Serializable {
     @BsonProperty(value = "_id")
     private ObjectId id;
     private ObjectId codUser;
-
+    private ObjectId codCompany;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSSXXX")
     private Date dateRegister;
 
