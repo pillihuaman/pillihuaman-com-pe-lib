@@ -22,7 +22,7 @@ public class ResponseUser {
     private String username;
     private int enabled;
     private List<String> roles;
-
+    private String tenantId;
 
 }
 

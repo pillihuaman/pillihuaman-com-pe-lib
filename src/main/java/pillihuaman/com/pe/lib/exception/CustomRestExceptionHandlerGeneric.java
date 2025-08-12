@@ -34,7 +34,7 @@ import java.util.Set;
 public class CustomRestExceptionHandlerGeneric extends ResponseEntityExceptionHandler {
     private static Logger logger =  LogManager.getLogger();
     // Custom exception to represent HTTP status codes
-    static class HttpException extends RuntimeException {
+    public static class HttpException extends RuntimeException {
         private HttpStatus httpStatus;
 
         public HttpException(HttpStatus httpStatus, String message) {

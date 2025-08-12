@@ -1,56 +1,68 @@
-name: Deploy Artifact to Artifactory
+name: Deploy Library to AWS CodeArtifact
 
 on:
   push:
     branches:
-      - main  # O cualquier otra rama que quieras
+      - main # O la rama que uses para tu librería
+
+env:
+  # --- Configuración de AWS (Apunta a tu NUEVA cuenta) ---
+  AWS_REGION: us-east-1 # La región de tu CodeArtifact
+  CODEARTIFACT_DOMAIN: pillihuamanlib
+  CODEARTIFACT_OWNER_ID: 614520203803
+  CODEARTIFACT_REPO_URL: https://pillihuamanlib-614520203803.d.codeartifact.us-east-1.amazonaws.com/maven/pillihuaman-com-pe-lib/
 
 jobs:
-  deploy:
+  build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
-      # Paso 1: Checkout del repositorio
-      - name: Checkout Repository
-        uses: actions/checkout@v2
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-      # Paso 2: Configurar el JDK 17
       - name: Set up JDK 17
-        uses: actions/setup-java@v2
+        uses: actions/setup-java@v3
         with:
           java-version: '17'
+          distribution: 'corretto'
 
-      # Paso 3: Configurar Maven
-      - name: Set up Maven
-        uses: actions/setup-maven@v2
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
         with:
-          maven-version: '3.8.1'
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
 
-      # Paso 4: Configurar Artifactory y autenticar el acceso
-      - name: Authenticate with Artifactory
+      - name: Configure Maven settings.xml
         run: |
-          echo "$ARTIFACTORY_API_KEY" | docker login $ARTIFACTORY_URL -u $ARTIFACTORY_USER --password-stdin
-
-      # Paso 5: Configurar el archivo `settings.xml` de Maven para Artifactory
-      - name: Configure Maven settings for Artifactory
-        run: |
+          # 1. Obtiene el token de autenticación para la NUEVA cuenta
+          AUTH_TOKEN=$(aws codeartifact get-authorization-token \
+            --domain ${{ env.CODEARTIFACT_DOMAIN }} \
+            --domain-owner ${{ env.CODEARTIFACT_OWNER_ID }} \
+            --query authorizationToken \
+            --output text)
+          
+          # 2. Crea el archivo settings.xml para la publicación
           mkdir -p ~/.m2
-          echo "<settings>
-                  <servers>
-                    <server>
-                      <id>artifactory</id>
-                      <username>${{ secrets.ARTIFACTORY_USER }}</username>
-                      <password>${{ secrets.ARTIFACTORY_API_KEY }}</password>
-                    </server>
-                  </servers>
-                </settings>" > ~/.m2/settings.xml
+          echo "<settings>\
+            <servers>\
+              <server>\
+                <id>codeartifact</id>\
+                <username>aws</username>\
+                <password>${AUTH_TOKEN}</password>\
+              </server>\
+            </servers>\
+          </settings>" > ~/.m2/settings.xml
+          
+          echo "✅ settings.xml for deployment configured."
 
-      # Paso 6: Compilar y desplegar el artefacto en Artifactory
-      - name: Build and Deploy Artifact to Artifactory
+      - name: Update pom.xml with new repository URL
+        # Este paso es importante para que 'mvn deploy' sepa a dónde publicar
         run: |
-          mvn clean deploy --settings ~/.m2/settings.xml
+          # Reemplaza la URL del distributionManagement en el pom.xml al vuelo
+          sed -i 's|<url>.*</url>|<url>${{ env.CODEARTIFACT_REPO_URL }}</url>|g' pom.xml
+          echo "✅ pom.xml updated for deployment."
 
-      # Paso 7: (Opcional) Invalidar la caché de CloudFront si es necesario
-      - name: Invalidate CloudFront Cache (optional)
-        run: |
-          aws cloudfront create-invalidation --distribution-id E1ZPD1AZFOON1L --paths '/*'
+      - name: Deploy artifact to CodeArtifact
+        # Usamos el id 'codeartifact' que coincide con nuestro settings.xml
+        run: mvn deploy -DrepositoryId=codeartifact

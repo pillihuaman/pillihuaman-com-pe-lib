@@ -11,11 +11,19 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 @Document(collection = "tenant")
-public class Tenant  implements    Serializable {
+public class Tenant implements Serializable {
     private static final long serialVersionUID = 1L;
     private ObjectId id;
     private String name;
     private String domain;
+
+    @Getter(lombok.AccessLevel.PUBLIC)
+    @Setter
     private boolean active;
+
     private AuditEntity audit;
+
+    public boolean isActive() {
+        return active;
+    }
 }

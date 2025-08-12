@@ -1,6 +1,5 @@
 package pillihuaman.com.pe.lib.common;
 
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
@@ -8,59 +7,48 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
 @Getter
 @JsonIgnoreProperties(ignoreUnknown = true)
-//@JsonIgnoreProperties("hibernateLazyInitializer")
 @Builder
 @AllArgsConstructor
 public class RespBase<T> {
 
     private Trace trace;
     private Status status;
+
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private T payload;
 
-    public RespBase(T data) {
-        this.payload = data;
-    }
-
-    public T getData() {
-        return payload;
-    }
-
-    public void setData(T data) {
-        this.payload = data;
+    public RespBase(T payload) {
+        this.payload = payload;
     }
 
     public Trace getTrace() {
         return trace;
     }
 
-    public Status getStatus() {
-        return status;
-    }
-
-    public T getPayload() {
-        return payload;
-    }
-
-
     public void setTrace(Trace trace) {
         this.trace = trace;
+    }
+
+    public Status getStatus() {
+        return status;
     }
 
     public void setStatus(Status status) {
         this.status = status;
     }
 
+    public T getPayload() {
+        return payload;
+    }
+
     public void setPayload(T payload) {
         this.payload = payload;
     }
-
 
     public RespBase() {
         super();
@@ -77,18 +65,13 @@ public class RespBase<T> {
 
     /**
      * Subclase plantilla para trazabilidad
-     *
-     * @author ttorres
      */
-    //@Data
     @Builder
     @AllArgsConstructor
     public static class Trace {
-        public Trace() {
-
-        }
-
         private String traceId;
+
+        public Trace() {}
 
         public String getTraceId() {
             return traceId;
@@ -101,17 +84,21 @@ public class RespBase<T> {
 
     /**
      * Subclase plantilla para status
-     *
-     * @author ttorres
      */
     @Builder
     @AllArgsConstructor
     public static class Status {
-
         private Boolean success;
         private Error error;
 
-        public Status() {
+        public Status() {}
+
+        public Boolean getSuccess() {
+            return success;
+        }
+
+        public void setSuccess(Boolean success) {
+            this.success = success;
         }
 
         public Error getError() {
@@ -122,49 +109,13 @@ public class RespBase<T> {
             this.error = error;
         }
 
-        public Boolean getSuccess() {
-            return success;
-        }
-
-        public void setSuccess(Boolean success) {
-            this.success = success;
-        }
-
-
         /**
          * Subclase plantilla para error
-         *
-         * @author ttorres
          */
         @Builder
         @AllArgsConstructor
         @Data
         public static class Error {
-
-            public String getCode() {
-                return code;
-            }
-
-            public void setCode(String code) {
-                this.code = code;
-            }
-
-            public String getHttpCode() {
-                return httpCode;
-            }
-
-            public void setHttpCode(String httpCode) {
-                this.httpCode = httpCode;
-            }
-
-            public List<String> getMessages() {
-                return messages;
-            }
-
-            public void setMessages(List<String> messages) {
-                this.messages = messages;
-            }
-
             private String code;
             private String httpCode;
             private List<String> messages;

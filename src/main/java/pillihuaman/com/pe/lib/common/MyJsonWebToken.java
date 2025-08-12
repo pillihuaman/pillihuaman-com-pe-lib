@@ -21,9 +21,9 @@ public class MyJsonWebToken extends JsonWebToken implements Serializable {
 
 
     private ResponseUser user;
-    private Aplication aplication;
-
-    public static class Aplication {
+    private Application aplication;
+    private String tenantId;
+    public static class Application {
 
         public ObjectId getAplicationID() {
             return aplicationID;
@@ -103,7 +103,7 @@ public class MyJsonWebToken extends JsonWebToken implements Serializable {
         this.user = user;
     }
 
-    public void setAplication(Aplication aplication) {
+    public void setApplication(Application aplication) {
         this.aplication = aplication;
     }
 

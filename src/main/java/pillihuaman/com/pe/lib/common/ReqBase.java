@@ -1,15 +1,12 @@
 package pillihuaman.com.pe.lib.common;
 
+public class ReqBase<T> {
 
-
-public class
-ReqBase<T> {
 	private RespBase.Trace trace;
-	private T data;
+	private T payload;
 
-	public ReqBase() {//NOSONAR
+	public ReqBase() {
 		super();
-
 	}
 
 	public RespBase.Trace getTrace() {
@@ -20,12 +17,11 @@ ReqBase<T> {
 		this.trace = trace;
 	}
 
-	public T getData() {
-		return data;
+	public T getPayload() {
+		return payload;
 	}
 
-	public void setData(T data) {
-		this.data = data;
+	public void setPayload(T payload) {
+		this.payload = payload;
 	}
-	
 }

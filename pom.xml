@@ -16,12 +16,17 @@
     <!-- ✅ Este bloque puede eliminarse si usas mirrors correctamente -->
     <repositories>
         <repository>
-            <id>codeartifact</id>
-            <url>https://pillihuamanlib-020510965219.d.codeartifact.us-east-2.amazonaws.com/maven/pillihuaman-com-pe-lib/</url>
+            <id>pillihuamanlib-pillihuaman-com-pe-lib</id>
+            <url>https://pillihuamanlib-614520203803.d.codeartifact.us-east-1.amazonaws.com/maven/pillihuaman-com-pe-lib/</url>
         </repository>
     </repositories>
 
     <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-mail</artifactId>
+            <version>3.0.5</version> <!-- O la versión de Spring Boot que desees usar -->
+        </dependency>
         <!-- tus dependencias, sin cambios -->
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
@@ -48,6 +53,7 @@
             <artifactId>log4j-api</artifactId>
             <version>2.20.0</version>
         </dependency>
+
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-core</artifactId>
@@ -97,6 +103,18 @@
             <version>4.2.2</version>
             <scope>compile</scope>
         </dependency>
+        <dependency>
+            <groupId>com.github.ua-parser</groupId>
+            <artifactId>uap-java</artifactId>
+            <version>1.5.3</version> <!-- O la versión más reciente -->
+        </dependency>
+        <dependency>
+            <groupId>com.maxmind.geoip2</groupId>
+            <artifactId>geoip2</artifactId>
+            <version>4.2.0</version> <!-- O la versión más reciente -->
+        </dependency>
+
+
     </dependencies>
 
     <build>
@@ -112,16 +130,14 @@
             </plugin>
         </plugins>
     </build>
-
-    <!-- ✅ DISTRIBUTION MANAGEMENT actualizado -->
     <distributionManagement>
         <repository>
-            <id>codeartifact</id>
-            <url>https://pillihuamanlib-020510965219.d.codeartifact.us-east-2.amazonaws.com/maven/pillihuaman-com-pe-lib/</url>
+            <id>pillihuamanlib-pillihuaman-com-pe-lib</id>
+            <url>https://pillihuamanlib-614520203803.d.codeartifact.us-east-1.amazonaws.com/maven/pillihuaman-com-pe-lib/</url>
         </repository>
         <snapshotRepository>
-            <id>codeartifact</id>
-            <url>https://pillihuamanlib-020510965219.d.codeartifact.us-east-2.amazonaws.com/maven/pillihuaman-com-pe-lib/</url>
+            <id>pillihuamanlib-pillihuaman-com-pe-lib</id>
+            <url>https://pillihuamanlib-614520203803.d.codeartifact.us-east-1.amazonaws.com/maven/pillihuaman-com-pe-lib/</url>
         </snapshotRepository>
     </distributionManagement>
 
