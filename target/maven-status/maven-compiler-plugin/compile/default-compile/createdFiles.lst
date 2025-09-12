@@ -15,6 +15,7 @@ pillihuaman\com\pe\lib\common\RespUser.class
 pillihuaman\com\pe\lib\exception\CreatedException.class
 pillihuaman\com\pe\lib\domain\Tenant.class
 pillihuaman\com\pe\lib\common\MyJsonWebToken$Application.class
+pillihuaman\com\pe\lib\exception\bussiness\BusinessLogicException.class
 pillihuaman\com\pe\lib\log\Log4J2PropertiesConf.class
 pillihuaman\com\pe\lib\common\RespBase$Trace$TraceBuilder.class
 pillihuaman\com\pe\lib\common\MyJsonWebToken.class
@@ -24,6 +25,7 @@ pillihuaman\com\pe\lib\common\RespUser$RespUserBuilder.class
 pillihuaman\com\pe\lib\exception\CustomRestExceptionHandlerGeneric$HttpException.class
 pillihuaman\com\pe\lib\common\RespBase$Status.class
 pillihuaman\com\pe\lib\domain\Tenant$TenantBuilder.class
+pillihuaman\com\pe\lib\exception\bussiness\ResourceNotFoundException.class
 pillihuaman\com\pe\lib\exception\StatusInactiveEndDateAfterStartDateValidation.class
 pillihuaman\com\pe\lib\exception\CustomRegistrationException.class
 pillihuaman\com\pe\lib\common\ResponseUser.class
@@ -33,5 +35,6 @@ pillihuaman\com\pe\lib\Application.class
 pillihuaman\com\pe\lib\common\RespBase.class
 pillihuaman\com\pe\lib\common\RespBase$RespBaseBuilder.class
 pillihuaman\com\pe\lib\common\ReqBase.class
+pillihuaman\com\pe\lib\exception\bussiness\InsufficientStockException.class
 pillihuaman\com\pe\lib\common\AuditEntity$AuditEntityBuilder.class
 pillihuaman\com\pe\lib\common\RespBase$Status$StatusBuilder.class

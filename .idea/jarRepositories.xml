@@ -3,6 +3,11 @@
   <component name="RemoteRepositoriesConfiguration">
     <remote-repository>
       <option name="id" value="central" />
+      <option name="name" value="Maven Central" />
+      <option name="url" value="https://repo.maven.apache.org/maven2" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="central" />
       <option name="name" value="Central Repository" />
       <option name="url" value="https://repo.maven.apache.org/maven2" />
     </remote-repository>
@@ -25,6 +30,11 @@
       <option name="id" value="jboss.community" />
       <option name="name" value="JBoss Community repository" />
       <option name="url" value="https://repository.jboss.org/nexus/content/repositories/public/" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="pillihuamanlib-pillihuaman-com-pe-lib" />
+      <option name="name" value="pillihuamanlib-pillihuaman-com-pe-lib" />
+      <option name="url" value="https://pillihuamanlib-614520203803.d.codeartifact.us-east-1.amazonaws.com/maven/pillihuaman-com-pe-lib/" />
     </remote-repository>
   </component>
 </project>

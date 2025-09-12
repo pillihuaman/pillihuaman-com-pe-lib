@@ -4,11 +4,10 @@ import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.core.config.Order;
 import org.springframework.beans.TypeMismatchException;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.core.Ordered;
+import org.springframework.http.*;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
@@ -24,19 +23,26 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 import pillihuaman.com.pe.lib.common.RespBase;
+import pillihuaman.com.pe.lib.exception.bussiness.BusinessLogicException;
+import pillihuaman.com.pe.lib.exception.bussiness.InsufficientStockException;
+import pillihuaman.com.pe.lib.exception.bussiness.ResourceNotFoundException;
 
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
+import java.util.stream.Collectors;
+
 @ControllerAdvice
 @EnableWebMvc
+@Order(Ordered.HIGHEST_PRECEDENCE)
 public class CustomRestExceptionHandlerGeneric extends ResponseEntityExceptionHandler {
+    private static final Logger apiLogger = LogManager.getLogger("ApiExceptionHandler");
     private static Logger logger =  LogManager.getLogger();
     // Custom exception to represent HTTP status codes
     public static class HttpException extends RuntimeException {
         private HttpStatus httpStatus;
-
         public HttpException(HttpStatus httpStatus, String message) {
             super(message);
             this.httpStatus = httpStatus;
@@ -47,61 +53,6 @@ public class CustomRestExceptionHandlerGeneric extends ResponseEntityExceptionHa
         }
     }
 
-    // Method to handle all exceptions
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<?> handleAllExceptions(Exception ex) {
-        HttpStatus httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
-        String message = "Error: ";
-        if (ex instanceof HttpException) {
-            HttpException httpException = (HttpException) ex;
-            httpStatus = httpException.getHttpStatus();
-            message = httpException.getMessage();
-        }
-
-        ErrorResponseApiGeneric errorResponseApi = new ErrorResponseApiGeneric(httpStatus.value(), ex.getMessage(), message);
-        logger.error(message+ex.getMessage(),httpStatus);
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(RespBase.builder().payload(errorResponseApi).trace(RespBase.Trace.builder().traceId("1").build()).status(RespBase.Status.builder().success(false).
-                error(RespBase.Status.Error.builder().messages(null).build()).build()).build());
-       // return new ResponseEntity<>(errorResponseApi, new HttpHeaders(), httpStatus);
-    }
-
-    // 400 - MethodArgumentNotValidException
-
-    public ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
-        List<String> errors = new ArrayList<>();
-        for (FieldError error : ex.getBindingResult().getFieldErrors()) {
-            errors.add(error.getField() + ": " + getErrorMessageOrDefault(error));
-        }
-        for (ObjectError error : ex.getBindingResult().getGlobalErrors()) {
-            errors.add(error.getObjectName() + ": " + getErrorMessageOrDefault(error));
-        }
-
-        ErrorResponseApiGeneric errorResponseApi = new ErrorResponseApiGeneric(HttpStatus.BAD_REQUEST.value(), getLocalizedMessageOrDefault(ex), errors);
-        return new ResponseEntity<>(errorResponseApi, new HttpHeaders(), status);
-
-
-/*
-        List<String> errors = new ArrayList<>();
-        for (FieldError error : ex.getBindingResult().getFieldErrors()) {
-            errors.add(error.getField() + ": " + error.getDefaultMessage());
-        }
-        for (ObjectError error : ex.getBindingResult().getGlobalErrors()) {
-            errors.add(error.getObjectName() + ": " + error.getDefaultMessage());
-        }
-        ErrorResponseApiGeneric errorResponseApi = new ErrorResponseApiGeneric(HttpStatus.BAD_REQUEST.value(), ex.getBody().getDetail(), errors);
-        return new ResponseEntity<>(errorResponseApi, new HttpHeaders(), status);*/
-    }
-
-    // Add other methods to handle specific exceptions and their status codes
-    // ...public ErrorResponseApiGeneric(final Integer status, final String message, final List<String> errors) {
-    //		this();
-    //		this.status = status;
-    //		this.message = message;
-    //		this.errors = errors;
-    //	}
-
-    // For example:
-    // 404 - NoHandlerFoundException
 
     protected ResponseEntity<Object> handleNoHandlerFoundException(NoHandlerFoundException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
         String error = "No handler found for " + ex.getBody().getDetail() + " " + ex.getRequestURL();
@@ -180,12 +131,15 @@ public class CustomRestExceptionHandlerGeneric extends ResponseEntityExceptionHa
     // 400 - ConstraintViolationException
     @ExceptionHandler(ConstraintViolationException.class)
     protected ResponseEntity<Object> handleConstraintViolation(ConstraintViolationException ex, WebRequest request) {
-        List<String> errors = new ArrayList<>();
-        for (ConstraintViolation<?> violation : ex.getConstraintViolations()) {
-            errors.add(violation.getRootBeanClass().getName() + " " + violation.getPropertyPath() + ": " + violation.getMessage());
-        }
-        ErrorResponseApiGeneric errorResponseApi = new ErrorResponseApiGeneric(HttpStatus.BAD_REQUEST.value(), ex.getMessage(), errors);
-        return new ResponseEntity<>(errorResponseApi, new HttpHeaders(), HttpStatus.BAD_REQUEST);
+        String traceId = UUID.randomUUID().toString();
+        apiLogger.warn("[TraceID: {}] Error de validación por restricción.", traceId);
+
+        List<String> errors = ex.getConstraintViolations().stream()
+                .map(violation -> violation.getPropertyPath() + ": " + violation.getMessage())
+                .collect(Collectors.toList());
+
+        RespBase<Object> responseBody = createErrorResponse("VALIDATION_ERROR", errors, traceId);
+        return new ResponseEntity<>(responseBody, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(UnprocessableEntityException.class)
@@ -209,6 +163,79 @@ public class CustomRestExceptionHandlerGeneric extends ResponseEntityExceptionHa
     }
 
 
+
+    @ExceptionHandler({
+            BusinessLogicException.class,
+            InsufficientStockException.class,
+            ResourceNotFoundException.class
+    })
+    public ResponseEntity<RespBase<Object>> handleBusinessExceptions(RuntimeException ex, WebRequest request) {
+
+        HttpStatus status;
+        String code;
+
+        if (ex instanceof ResourceNotFoundException) {
+            status = HttpStatus.NOT_FOUND; // 404
+            code = "RESOURCE_NOT_FOUND";
+        } else if (ex instanceof InsufficientStockException) {
+            status = HttpStatus.UNPROCESSABLE_ENTITY; // 422
+            code = "INSUFFICIENT_STOCK";
+        } else {
+            status = HttpStatus.UNPROCESSABLE_ENTITY; // 422
+            code = "BUSINESS_RULE_VIOLATION";
+        }
+
+        String traceId = UUID.randomUUID().toString();
+        apiLogger.warn("[TraceID: {}] Excepción de negocio controlada: {} - {}", traceId, code, ex.getMessage());
+
+        RespBase<Object> responseBody = createErrorResponse(code, List.of(ex.getMessage()), traceId);
+
+        return new ResponseEntity<>(responseBody, status);
+    }
+
+    @Override
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
+        String traceId = UUID.randomUUID().toString();
+        apiLogger.warn("[TraceID: {}] Error de validación en la petición.", traceId);
+
+        List<String> validationErrors = ex.getBindingResult().getFieldErrors().stream()
+                .map(error -> "El campo '" + error.getField() + "' " + error.getDefaultMessage())
+                .collect(Collectors.toList());
+
+        RespBase<Object> responseBody = createErrorResponse("VALIDATION_ERROR", validationErrors, traceId);
+
+        return new ResponseEntity<>(responseBody, HttpStatus.BAD_REQUEST);
+    }
+    @ExceptionHandler({ Exception.class })
+    public ResponseEntity<RespBase<Object>> handleAllOtherExceptions(Exception ex, WebRequest request) {
+
+        String traceId = UUID.randomUUID().toString();
+        apiLogger.error("[TraceID: {}] Se ha producido una excepción inesperada del sistema.", traceId, ex);
+
+        String userMessage = String.format("Ocurrió un error inesperado en el servidor. Por favor, contacte a soporte e informe el siguiente código: %s", traceId);
+
+        RespBase<Object> responseBody = createErrorResponse("INTERNAL_SERVER_ERROR", List.of(userMessage), traceId);
+
+        return new ResponseEntity<>(responseBody, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    private RespBase<Object> createErrorResponse(String code, List<String> messages, String traceId) {
+        RespBase<Object> response = new RespBase<>();
+        RespBase.Status status = new RespBase.Status();
+        RespBase.Status.Error error = new RespBase.Status.Error();
+
+        error.setCode(code);
+        error.setMessages(messages);
+
+        status.setSuccess(false);
+        status.setError(error);
+
+        response.setStatus(status);
+        response.setTrace(new RespBase.Trace(traceId));
+        response.setPayload(null);
+
+        return response;
+    }
 }
 
 
