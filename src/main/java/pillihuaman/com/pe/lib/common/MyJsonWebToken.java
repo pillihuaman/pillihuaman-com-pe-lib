@@ -10,6 +10,7 @@ import org.jboss.resteasy.jwt.JsonWebToken;
 
 
 import java.io.Serializable;
+import java.util.List;
 
 @Data
 @Builder
@@ -23,6 +24,7 @@ public class MyJsonWebToken extends JsonWebToken implements Serializable {
     private ResponseUser user;
     private Application aplication;
     private String tenantId;
+    private List<String> permissions;
     public static class Application {
 
         public ObjectId getAplicationID() {
@@ -92,9 +94,18 @@ public class MyJsonWebToken extends JsonWebToken implements Serializable {
         this.aplication.name = name;
     }
 
+    public List<String> getPermissions() {
+        return permissions;
+    }
+
+    public void setPermissions(List<String> permissions) {
+        this.permissions = permissions;
+    }
+
     /**
      * @param multiSession the multiSession to set
      */
+
     public void setMultiSession(String multiSession) {
         this.aplication.multiSession = multiSession;
     }
