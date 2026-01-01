@@ -22,13 +22,13 @@
                 <repository>
                     <id>pillihuamanlib-pillihuaman-com-pe-lib</id>
                     <!-- ▼▼▼ URL ACTUALIZADA PARA TU NUEVA CUENTA ▼▼▼ -->
-                    <url>https://pillihuamanlib-614520203803.d.codeartifact.us-east-1.amazonaws.com/maven/pillihuaman-com-pe-lib/</url>
+                    <url>https://pillihuamanlib-653464152705.d.codeartifact.us-east-1.amazonaws.com/maven/pillihuaman-com-pe-lib/</url>
                 </repository>
             </repositories>
             <pluginRepositories>
                 <pluginRepository>
                     <id>pillihuamanlib-pillihuaman-com-pe-lib</id>
-                    <url>https://pillihuamanlib-614520203803.d.codeartifact.us-east-1.amazonaws.com/maven/pillihuaman-com-pe-lib/</url>
+                    <url>https://pillihuamanlib-653464152705.d.codeartifact.us-east-1.amazonaws.com/maven/pillihuaman-com-pe-lib/</url>
                 </pluginRepository>
             </pluginRepositories>
         </profile>

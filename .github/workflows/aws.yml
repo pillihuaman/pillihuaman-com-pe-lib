@@ -9,8 +9,8 @@ env:
   # --- Configuración de AWS (Apunta a tu NUEVA cuenta) ---
   AWS_REGION: us-east-1 # La región de tu CodeArtifact
   CODEARTIFACT_DOMAIN: pillihuamanlib
-  CODEARTIFACT_OWNER_ID: 614520203803
-  CODEARTIFACT_REPO_URL: https://pillihuamanlib-614520203803.d.codeartifact.us-east-1.amazonaws.com/maven/pillihuaman-com-pe-lib/
+  CODEARTIFACT_OWNER_ID: 653464152705
+  CODEARTIFACT_REPO_URL: https://pillihuamanlib-653464152705.d.codeartifact.us-east-1.amazonaws.com/maven/pillihuaman-com-pe-lib/
 
 jobs:
   build-and-deploy:

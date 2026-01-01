@@ -13,21 +13,16 @@
         <java.version>17</java.version>
     </properties>
 
-    <!-- ✅ Este bloque puede eliminarse si usas mirrors correctamente -->
-    <repositories>
-        <repository>
-            <id>pillihuamanlib-pillihuaman-com-pe-lib</id>
-            <url>https://pillihuamanlib-614520203803.d.codeartifact.us-east-1.amazonaws.com/maven/pillihuaman-com-pe-lib/</url>
-        </repository>
-    </repositories>
+    <!-- ELIMINADO: Ya no necesitas apuntar a AWS para las dependencias de esta librería -->
+    <!-- <repositories> ... </repositories> -->
 
     <dependencies>
+        <!-- Tus dependencias no cambian -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-mail</artifactId>
-            <version>3.0.5</version> <!-- O la versión de Spring Boot que desees usar -->
+            <version>3.0.5</version>
         </dependency>
-        <!-- tus dependencias, sin cambios -->
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-annotations</artifactId>
@@ -53,7 +48,6 @@
             <artifactId>log4j-api</artifactId>
             <version>2.20.0</version>
         </dependency>
-
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-core</artifactId>
@@ -106,15 +100,13 @@
         <dependency>
             <groupId>com.github.ua-parser</groupId>
             <artifactId>uap-java</artifactId>
-            <version>1.5.3</version> <!-- O la versión más reciente -->
+            <version>1.5.3</version>
         </dependency>
         <dependency>
             <groupId>com.maxmind.geoip2</groupId>
             <artifactId>geoip2</artifactId>
-            <version>4.2.0</version> <!-- O la versión más reciente -->
+            <version>4.2.0</version>
         </dependency>
-
-
     </dependencies>
 
     <build>
@@ -129,17 +121,25 @@
                 </configuration>
             </plugin>
         </plugins>
+        <!-- AÑADIDO: Extensión para entender el protocolo de Artifact Registry -->
+        <extensions>
+            <extension>
+                <groupId>com.google.cloud.artifactregistry</groupId>
+                <artifactId>artifactregistry-maven-wagon</artifactId>
+                <version>2.2.1</version>
+            </extension>
+        </extensions>
     </build>
+
+    <!-- MODIFICADO: Apuntando a tu nuevo repositorio en Google Artifact Registry -->
     <distributionManagement>
         <repository>
-            <id>pillihuamanlib-pillihuaman-com-pe-lib</id>
-            <url>https://pillihuamanlib-614520203803.d.codeartifact.us-east-1.amazonaws.com/maven/pillihuaman-com-pe-lib/</url>
+            <id>pillihuaman-maven</id>
+            <url>artifactregistry://us-central1-maven.pkg.dev/tidal-eon-477002-e8/pillihuaman-maven</url>
         </repository>
         <snapshotRepository>
-            <id>pillihuamanlib-pillihuaman-com-pe-lib</id>
-            <url>https://pillihuamanlib-614520203803.d.codeartifact.us-east-1.amazonaws.com/maven/pillihuaman-com-pe-lib/</url>
+            <id>pillihuaman-maven</id>
+            <url>artifactregistry://us-central1-maven.pkg.dev/tidal-eon-477002-e8/pillihuaman-maven</url>
         </snapshotRepository>
     </distributionManagement>
-
-
 </project>
