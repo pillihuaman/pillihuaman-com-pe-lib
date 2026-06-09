@@ -16,6 +16,9 @@ public class Tenant implements Serializable {
     private ObjectId id;
     private String name;
     private String domain;
+    private String landingPage;
+    private String description;
+
 
     @Getter(lombok.AccessLevel.PUBLIC)
     @Setter
